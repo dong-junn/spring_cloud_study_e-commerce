@@ -89,4 +89,4 @@ spring:
                 postLogger: true
 
 token:
-  secret: "2KpW7x3/pNW6LFdfmDAtxilsdNYB0vQSivsnsyWxLL3EBrtmGK2WNgT7LaToXMJr4hNC8Sd/6PEEjxMUBzsKWg=="
+  secret: 50a03fc585d868689afa411b2125dd04e7755ecba6a3e2a472ec1b10eeed2b4edb770b9939bdf23d35740ed2f261c3ef364b5fcdeb3bfc14151507724e507988
