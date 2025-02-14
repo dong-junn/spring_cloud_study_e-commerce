@@ -53,6 +53,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+            - AuthorizationHeaderFilter
 
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
@@ -86,3 +87,6 @@ spring:
                 baseMessage: Hi, there
                 preLogger: true
                 postLogger: true
+
+token:
+  secret: "2KpW7x3/pNW6LFdfmDAtxilsdNYB0vQSivsnsyWxLL3EBrtmGK2WNgT7LaToXMJr4hNC8Sd/6PEEjxMUBzsKWg=="
