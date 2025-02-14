@@ -50,7 +50,7 @@ public class WebSecurity {
                         .requestMatchers(new AntPathRequestMatcher("h2-console/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/users", "POST")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/welcome")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/health-check")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/health_check")).permitAll()
 
                         .requestMatchers("/**").access(
                                         new WebExpressionAuthorizationManager("hasIpAddress('127.0.0.1') or hasIpAddress('192.168.1.53')"))
