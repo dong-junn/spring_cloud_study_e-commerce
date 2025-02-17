@@ -6,6 +6,15 @@ server:
 spring:
   application:
     name: user-service
+
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+
 #  zipkin:
 #    base-url: http://127.0.0.1:9411
 #    enabled: true
@@ -47,7 +56,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: refresh, health, beans, busrefresh, info, metrics, prometheus
+        include: refresh, health, beans, busrefresh
 
 #token:
 #  expiration_time: 86400000
