@@ -15,6 +15,7 @@ import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -34,11 +35,20 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     BCryptPasswordEncoder passwordEncoder;
-
     Environment env;
+    RestTemplate restTemplate;
 
-    OrderServiceClient orderServiceClient;
 
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository,
+                           BCryptPasswordEncoder passwordEncoder,
+                           Environment env,
+                           RestTemplate restTemplate) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.env = env;
+        this.restTemplate = restTemplate;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -50,16 +60,6 @@ public class UserServiceImpl implements UserService {
         return new User(userEntity.getEmail(), userEntity.getEncryptedPwd(),
                 true, true, true, true,
                 new ArrayList<>());
-    }
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                           BCryptPasswordEncoder passwordEncoder,
-                           Environment env) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.env = env;
-        this.orderServiceClient = orderServiceClient;
     }
 
     @Override
@@ -87,31 +87,15 @@ public class UserServiceImpl implements UserService {
 
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
+        /* REST TEMPLATE을 이용하여 데이터를 주고 받기 */
 //        List<ResponseOrder> orders = new ArrayList<>();
-        /* Using as rest template */
-//        String orderUrl = String.format(env.getProperty("order_service.url"), userId);
-//        ResponseEntity<List<ResponseOrder>> orderListResponse =
-//                restTemplate.exchange(orderUrl, HttpMethod.GET, null,
-//                                            new ParameterizedTypeReference<List<ResponseOrder>>() {
-//                });
-//        List<ResponseOrder> ordersList = orderListResponse.getBody();
+        String orderUrl = String.format(env.getProperty("order_service.url"), userId); //getProperty값에 %s값이 있어서 치환해준다
+        ResponseEntity<List<ResponseOrder>> orderListResponse =
+                restTemplate.exchange(orderUrl, HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<ResponseOrder>>() {
+        });
 
-        /* Using a feign client */
-        /* Feign exception handling */
-//        List<ResponseOrder> ordersList = null;
-//        try {
-//            ordersList = orderServiceClient.getOrders(userId);
-//        } catch (FeignException ex) {
-//            log.error(ex.getMessage());
-//        }
-
-        /* ErrorDecoder */
-        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
-//        log.info("Before call orders microservice");
-//        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitbreaker");
-//        List<ResponseOrder> ordersList = circuitBreaker.run(() -> orderServiceClient.getOrders(userId),
-//                throwable -> new ArrayList<>());
-//        log.info("After called orders microservice");
+        List<ResponseOrder> ordersList = orderListResponse.getBody();
 
         userDto.setOrders(ordersList);
 
