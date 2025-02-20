@@ -37,17 +37,21 @@ public class UserServiceImpl implements UserService {
     BCryptPasswordEncoder passwordEncoder;
     Environment env;
     RestTemplate restTemplate;
+    OrderServiceClient orderServiceClient;
 
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository,
                            BCryptPasswordEncoder passwordEncoder,
                            Environment env,
-                           RestTemplate restTemplate) {
+                           RestTemplate restTemplate,
+                           OrderServiceClient orderServiceClient
+                           ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
         this.restTemplate = restTemplate;
+        this.orderServiceClient = orderServiceClient;
     }
 
     @Override
@@ -88,17 +92,18 @@ public class UserServiceImpl implements UserService {
         UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 
         /* REST TEMPLATE을 이용하여 데이터를 주고 받기 */
-//        List<ResponseOrder> orders = new ArrayList<>();
+/*        List<ResponseOrder> orders = new ArrayList<>();
         String orderUrl = String.format(env.getProperty("order_service.url"), userId); //getProperty값에 %s값이 있어서 치환해준다
         ResponseEntity<List<ResponseOrder>> orderListResponse =
                 restTemplate.exchange(orderUrl, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<ResponseOrder>>() {
         });
+        List<ResponseOrder> ordersList = orderListResponse.getBody(); */
 
-        List<ResponseOrder> ordersList = orderListResponse.getBody();
+        /* FEIGN CLIENT를 이용하여 데이터 주고 받기 */
+        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
 
         userDto.setOrders(ordersList);
-
         return userDto;
     }
 
