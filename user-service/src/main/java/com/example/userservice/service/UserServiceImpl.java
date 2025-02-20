@@ -100,8 +100,13 @@ public class UserServiceImpl implements UserService {
         });
         List<ResponseOrder> ordersList = orderListResponse.getBody(); */
 
-        /* FEIGN CLIENT를 이용하여 데이터 주고 받기 */
-        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+        /* FEIGN CLIENT를 이용하여 데이터 주고 받기 */ /* FEIGN CLIENT 예외 처리 */
+        List<ResponseOrder> ordersList = null;
+        try {
+            ordersList = orderServiceClient.getOrders(userId);
+        } catch (FeignException ex) {
+            log.error(ex.getMessage());
+        }
 
         userDto.setOrders(ordersList);
         return userDto;
