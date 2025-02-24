@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
     Environment env;
     RestTemplate restTemplate;
     OrderServiceClient orderServiceClient;
+    CircuitBreakerFactory circuitBreakerFactory;
 
 
     @Autowired
@@ -45,13 +46,16 @@ public class UserServiceImpl implements UserService {
                            BCryptPasswordEncoder passwordEncoder,
                            Environment env,
                            RestTemplate restTemplate,
-                           OrderServiceClient orderServiceClient
+                           OrderServiceClient orderServiceClient,
+                           CircuitBreakerFactory circuitBreakerFactory
                            ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.env = env;
         this.restTemplate = restTemplate;
         this.orderServiceClient = orderServiceClient;
+        this.circuitBreakerFactory = circuitBreakerFactory;
+
     }
 
     @Override
@@ -109,7 +113,12 @@ public class UserServiceImpl implements UserService {
         }*/
 
         /* ErrorDecoder 예외 처리 */
-        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+//        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+
+        /* ErrorDecoder -> circuitBreaker를 이용하여 처리 */
+        CircuitBreaker circuitbreaker = circuitBreakerFactory.create("circuitbreaker");
+        List<ResponseOrder> ordersList = circuitbreaker.run(() -> orderServiceClient.getOrders(userId),
+                throwable -> new ArrayList<>());
 
         userDto.setOrders(ordersList);
         return userDto;
