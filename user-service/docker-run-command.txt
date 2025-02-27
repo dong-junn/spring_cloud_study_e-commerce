@@ -8,5 +8,18 @@ docker build --tag geo02/config-service:1.0 .
 # Run Config Server container
 docker run -d -p 8888:8888 --network ecommerce-network -e "spring.rabbitmq.host=rabbitmq" -e "spring.profiles.activate=default" --name config-service geo02/config-service:1.0
 
+# other servics as same
 
+# apigateway service build
+docker build -t geo02/apigateway-service:1.0 . 
+
+# push to docker hub 
+docker push geo02/apigateway-service:1.0
+
+# run apigateway service
+docker run -d -p 8000:8000 --network ecommerce-network \
+    -e "spring.cloud.config.url=http://config-service:8888" \
+    -e "spring.rabbitmq.host=rabbitmq" \
+    -e "eureka.client.service-url.defaultZone=http://discovery-service:8761/eureka" \
+    --name apigateway-service geo02/apigateway-service:1.0
 
