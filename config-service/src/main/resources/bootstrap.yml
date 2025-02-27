@@ -1,6 +1,8 @@
 encrypt:
 #  key: abcdefghijklmnopqrstuvwxyz0123456789
   key-store:
-    location: file://${user.home}/key/msa/apiEncryptionKey.jks
+#    location: file://${user.home}/key/msa/apiEncryptionKey.jks
+    location: file:/apiEncryptionKey.jks
+    #docker 환경기준으로 경로 변경
     password: test1234
     alias: apiencryptionkey
