@@ -1,18 +1,17 @@
 spring:
-    datasource:
-        driver-class-name: org.h2.Driver
-        url: jdbc:h2:mem:testdb
-        username: '{cipher}AYCdaPVcP0Nc2QMs+uScpGr0u9+QHTB8G3F5LSF+4JukG7EOUcbLBj1gIGzSOiAqWIojDg0tSwlFMFP2/hias1wm4U3h3PcjEEUf9n5/9OQ8yP6+duWxQqguodAM3caArnUqmFPPS/M4ebs0EKf0jN655hNlKsUq2VbzbhNmPoakREy1p4ZP7NB0y2nIXZ2G7OctSWkoEXtANdZrIBcplEaZfhhtxdvlN0Fz5FGf/kuX0d8VdGyTyTRXjHYl54FAJfLreU7lXlg0fa8hQKULG1otdE4T4KL08Qlo8SgRrhBWA7X6OTo/ajH7LK6InmeC2sE5Rp0ls5T5owKBAPzb5W3bW+WOP8zWlz282V01t6/D/iU6kNbNjesi1rTbaaxC+qefA0190z9jMFCWDf3pma1isUjiy57ttLgAtrk07LTIvh7Le9gA2d1Os9l2F90UsALBoRyv9k7z7GD/vcx63RDTu3tsnCQses0FnTXzNPBtqgozzG6mRePYfQaS3txz/1363MXCpai33kDOxA8bUtynDRJ3fw8l37L2h3wOwaPL7Q=='
-        password: 
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: 
 
 token:
-    expiration_time : 864000000
-    secret_: my_token_native_user_service
-
+  expiration_time: 86400000
+  secret: '{cipher}AQBc2gzIET++nplSofhKaUK1lYDKYvYeSMkqkQZvtda4DAfzx1GeAPmgkZW2KQG/Ay43OZDLr1cuNdLb+EcRYNLGUEO7tsIU8Tq/gaEyoC9EHQCEndTVdEFf/Hc8lPnX4mXjAPokh9HVZiThcYfKev8mxsnBG1cuzwejV0qLZAWrD2WW51/56GwDDo27Xwo3XTx7zhkM1NUftradjls/oMGe1HhLc6O3wj6xuqep6D3UG5KcAmeZ1E4oJ52aR0cRQqw7V6RHuIeybaAUx/Qz5EKWTtQf2NejALtUvkjdE7Jd5tdHoCCsKmwvkVWgCUyzojvimnegO+fcIzj+Rb97JrgtoAUABc57aAOQNyInOT51V2x9ssg01UToBxHQ18XDtL19C6zoFEV5pefKgxN2HAVyFvwfuFvtoWeaSxAhMrEPKw=='
 gateway:
-    ip: 192.168.1.139
+  ip: 127.0.0.1
 
-order_service:
-    url: http://ORDER-SERVICE/order-service/%s/orders
-    exception:
-        orders_is_empty: User's orders is  empty.
+order-service:
+  url: http://ORDER-SERVICE/order-service/%s/orders
+  exception:
+    order-is-empty: User's order is empty.
