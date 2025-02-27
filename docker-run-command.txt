@@ -23,3 +23,12 @@ docker run -d -p 8000:8000 --network ecommerce-network \
     -e "eureka.client.service-url.defaultZone=http://discovery-service:8761/eureka" \
     --name apigateway-service geo02/apigateway-service:1.0
 
+# run prometheus
+docker run -d -p 9090:9090 \ 
+    --network ecommerce-network \
+    --name prometheus \
+    -v /Users/dj/coding/msa/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
+    prom/prometheus
+
+
+
