@@ -87,12 +87,16 @@ public class OrderController {
             result.add(new ModelMapper().map(v, ResponseOrder.class));
         });
 
+        /* resilience4j test */
+        // 강제로 예외 터트려서 테스트
+/*
         try {
             Thread.sleep(1000);
             throw new Exception("장애 발생");
         } catch (InterruptedException ex) {
             log.warn(ex.getMessage());
         }
+*/
 
         log.info("After retrieved orders data");
 
