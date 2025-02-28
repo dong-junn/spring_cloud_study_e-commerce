@@ -24,11 +24,27 @@ docker run -d -p 8000:8000 --network ecommerce-network \
     --name apigateway-service geo02/apigateway-service:1.0
 
 # run prometheus
-docker run -d -p 9090:9090 \ 
-    --network ecommerce-network \
+docker run -d -p 9090:9090 --network ecommerce-network \
     --name prometheus \
     -v /Users/dj/coding/msa/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \
     prom/prometheus
+
+# (now on build process is skipped because all process is similar or same)
+
+docker run -d --network ecommerce-network \
+    --name user-service \
+    -e "spring.cloud.config.uri=http://config-service:8888" \
+    -e "spring.rabbitmq.host=rabbitmq" \
+    -e "spring.zipkin.base-url=http://zipkin:9411" \
+    -e "eureka.client.service-url.defaultZone=http://discovery-service:8761/eureka/" \
+    -e "logging.file=/api-logs/users-ws.log" \
+    geo02/user-service:1.0
+
+# enter log mode
+docker logs -f user-service
+
+
+
 
 
 

@@ -1,5 +1,5 @@
-FROM openjdk:11-jdk-slim
-#해당 이미지를 기반으로(jdk)
+FROM amazoncorretto:17.0.14-alpine3.21
+# 해당 이미지를 기반으로(Amazon Corretto JDK 17)
 
 VOLUME /tmp
 #tmp 폴더에
